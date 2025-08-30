@@ -3,28 +3,42 @@ import streamlit as st
 # App title
 st.title("🍹 Welcome to Frozen Paradize")
 
-# Get user's name
+# Customer name
 name = st.text_input("What is your name?", "")
 
 if name:
     st.write(f"Hello {name}, thank you so much for coming in today! 😊")
 
-    # Menu options
-    menu_items = [
-        "Mango Juice", "Apple Juice", "Avocado Juice",
-        "Pineapple Juice", "Strawberry Juice", "Cocktail Juice"
-    ]
+    # Menu and pricing
+    menu = {
+        "Mango Juice": 10,
+        "Apple Juice": 10,
+        "Avocado Juice": 12,
+        "Pineapple Juice": 11,
+        "Strawberry Juice": 10,
+        "Cocktail Juice": 15
+    }
 
-    # Show menu and take order
-    order = st.selectbox(f"{name}, what would you like from our menu today?", menu_items)
+    st.write("Here's what we're serving today:")
 
-    # Quantity input
-    quantity = st.number_input("How many juices would you like?", min_value=1, step=1)
+    # Create input fields for each item
+    order_summary = {}
+    for item, price in menu.items():
+        qty = st.number_input(f"{item} (${price}) - Quantity:", min_value=0, step=1, key=item)
+        if qty > 0:
+            order_summary[item] = {"quantity": qty, "price": price}
 
-    # Price and total
-    price = 10
-    total = price * quantity
+    # Calculate total
+    if order_summary:
+        st.subheader("🧾 Your Order Summary")
+        total = 0
+        for item, details in order_summary.items():
+            item_total = details["quantity"] * details["price"]
+            total += item_total
+            st.write(f"{details['quantity']} x {item} = ${item_total}")
 
-    # Display total and confirmation
-    st.write(f"🧾 Thank you so much! Your total is: **${total}**")
-    st.success(f"Sounds good {name}, we will have your {quantity} {order}(s) ready for you in a moment! 🍹")
+        st.markdown(f"### ✅ Total: **${total}**")
+        st.success(f"Thanks {name}! We'll have your order ready shortly 🍹")
+
+    else:
+        st.info("Select at least one item to place your order.")
