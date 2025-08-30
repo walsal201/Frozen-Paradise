@@ -1,4 +1,3 @@
-
 print("Welcome to Frozen Paradize")
 name = input("what is your name? \n")
 print("Hello " + name + ", thank you so much for coming in today.\n\n\n")
